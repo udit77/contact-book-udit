@@ -9,7 +9,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
             data: {
             },
             timeout: 8000,
-            headers:{} 
+            headers:{'Authorization':'plivo123'} 
         }) 
     }
 
@@ -21,7 +21,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
                 offset:offset
             },
             timeout: 8000,
-            headers:{}  
+	   headers:{'Authorization':'plivo123'}
         })      
     }
 
@@ -34,7 +34,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
                 searchString:searchString
             },
             timeout: 8000,
-            headers:{}  
+	    headers:{'Authorization':'plivo123'}
         }) 
     }
 
@@ -45,7 +45,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
             params: {
             },
             timeout: 8000,
-            headers:{} 
+	    headers:{'Authorization':'plivo123'}
         })
     }
 
@@ -59,7 +59,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
                 email : information.email
             },
             timeout: 8000,
-            headers:{} 
+	    headers:{'Authorization':'plivo123'}
         }) 
     }
 
@@ -73,7 +73,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
                 email : information.email
             },
             timeout: 8000,
-            headers:{} 
+	    headers:{'Authorization':'plivo123'}
         }) 
     }
 
@@ -85,7 +85,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
                 email:email
             },
             timeout: 8000,
-            headers:{} 
+	    headers:{'Authorization':'plivo123'}
         }) 
     }
          

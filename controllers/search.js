@@ -156,6 +156,9 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
             $scope.information = {};
             populateTable();       
         }).error(function(error){
+	    if(error && error.msg)
+		$scope.errorString = error.msg;
+	    else
             $scope.errorString = "Error occured. Please try again.";
         })
     }
@@ -243,10 +246,6 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
     $scope.$watch('data.searchString',function(newValue, oldValue){
         if(newValue){
             if(newValue.length > 2){
-                if($scope.contactDetails.length == 0){
-                    $scope.errorString = "No search results.";
-                    return;
-                }
                 $scope.errorString = null;
                 if(search_query_object != null){
                     $timeout.cancel(search_query_object);
@@ -257,19 +256,23 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
                         method: "get",
                         url: "/server/search",
                         timeout: 8000,
-                        headers:{},
+                        headers:{'Authorization':'plivo123'},
                         params: {
-                            searchString:newValue
+                            searchString: encodeURIComponent(newValue)
                         } 
                     }).success(function(response) {
+			$scope.contactDetails = [];
+			if(response.data.length){
                         $scope.errorString = null;
-                        $scope.contactDetails = [];
                         setPagination(response);
                         $scope.page.current = $scope.page.min;
                         for(var i=0;i<response.data.length;i++){
                             $scope.contactDetails.push(response.data[i]);
                             $scope.lastPaginatedId = response.data[i].id;
                         }
+			}else{
+				$scope.errorString = "No search results";
+			}
                     }).error(function(error,status) {
                         $scope.errorString = "Error occured.Please try again.";
                     });
