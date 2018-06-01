@@ -134,10 +134,11 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
 
     var populateTable = function(){
         ContactService.getData().success(function(response){
+	    $scope.data.searchString = null;
             setPagination(response);
             setData(response);
         }).error(function(error){
-            $scope.errorString = "Error occured. Please try again.";
+            $scope.errorString = "Error occure in fetching data. Please refresh the page again.";
         })
     }
 
@@ -230,9 +231,12 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
                 alert("Data initialization failed. Please try again.");
             }
         }).error(function(error){
-            alert("Error occured in fetchin data. Please try again.");
+            alert("Error occured in fetching data. Please try again.");
         })
     }
+    populateTable();
+
+
 
     var search_query_object = null;
 
@@ -251,7 +255,7 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
                 search_query_object = $timeout(function(){
                     $http({
                         method: "get",
-                        url: "../plivo/server/index.php/search",
+                        url: "/server/search",
                         timeout: 8000,
                         headers:{},
                         params: {
