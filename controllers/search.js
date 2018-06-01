@@ -67,6 +67,7 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
 
     $scope.showPrevious = function(){
         var offset = ($scope.page.current-2)*10;
+	if(offset < 0)offset = 0;
         if(!$scope.data.searchString || !$scope.data.searchString.trim()){
             ContactService.fetchByOffset(offset).success(function(response){
                 setData(response);
@@ -154,7 +155,7 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
         $scope.errorString = null;
         ContactService.addData($scope.information).success(function(response){
             $scope.information = {};
-            populateTable();       
+            $scope.fetchByOffset($scope.page.current);       
         }).error(function(error){
 	    if(error && error.msg)
 		$scope.errorString = error.msg;
@@ -203,17 +204,16 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
 
     $scope.fetchByOffset = function(offset){
         console.log(offset);
+	$scope.page.current = offset;
+        var offset = (offset-1)*10;
+        if(offset<0)offset=0;
         if(!$scope.data.searchString || !$scope.data.searchString.trim()){
-            $scope.page.current = offset;
-            var offset = (offset-1)*10;
             ContactService.fetchByOffset(offset).success(function(response){
                 setData(response);
             }).error(function(error){
                  $scope.errorString = "Error occured. Please try again.";
             })    
         }else{
-            $scope.page.current = offset;
-            var offset = (offset-1)*10;
             ContactService.fetchByOffsetAndSearch(offset,$scope.data.searchString).success(function(response){
                 setData(response);
             }).error(function(error){
