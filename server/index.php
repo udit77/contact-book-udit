@@ -82,16 +82,22 @@ class DataRetriver{
 		return $result;
 	}
 
-	function storeEvictedKeys($tableName, $key)
+	function deleteData($tableName, $email)
 	{
-	
-		$sql = "INSERT INTO plivo.".$tableName." (word) VALUES ('$key')";
+		$sql = "DELETE FROM plivo.".$tableName." where word = '".$email."'";
 		$result = DataRetriver::executeQuery($sql);
 		return $result;
 	}
 
 	function insertData($tableName,$word,$meaning){
 		$sql = "INSERT INTO plivo.".$tableName." (word,meaning) VALUES ('$word','$meaning')";
+		$result = DataRetriver::executeQuery($sql);
+		return $result;
+	}
+
+	function updateData($tableName,$word,$meaning){
+		$sql = "UPDATE plivo.".$tableName." SET meaning = '".$meaning."' WHERE word = '".$word."'";
+		//echo $sql;
 		$result = DataRetriver::executeQuery($sql);
 		return $result;
 	}
@@ -163,23 +169,9 @@ $app = new Slim\App([
 ]);
 
 $app->get('/', function() {
-	echo "Adaptive Replacement Cache Demo Project";
+	echo "Contact Book Demo Project";
 });
 
-$app->get('/key', function($req, $res) {
-	$params = $req->getQueryParams();
-	$key = $params['word'];
-
-	$result = ((new DataRetriver)->getValue('contact', $key));
-	$row = $result->fetch_array();
-	$result = $row["meaning"];
-	if(is_null($result)){
-		echo json_encode(['status'=>'NOT_FOUND']);
-	}else{
-		echo json_encode(['status'=>'FOUND','meaning'=>$result]);
-		//echo $result;
-	}
-});
 
 $app->get('/allKeyValues', function($req,$res) {
 	$DataRetriver = new DataRetriver();
@@ -206,6 +198,7 @@ $app->get('/allKeyValuesRange', function($req,$res) {
 	$DataRetriver = new DataRetriver();
 	$params = $req->getQueryParams();
 	$offset = $params['offset'];
+	$returnJson = [];
 	$result = $DataRetriver->getAllKeyValuesRange('contact',$offset);
 	$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	foreach($rows as $row){
@@ -250,13 +243,6 @@ $app->get('/searchByRange', function($req,$res) {
 	echo json_encode($returnJson);
 });
 
-$app->post('/evictedKey', function($req, $res) {
-	$request = $req->getParsedBody()['word'];
-	$result = ((new DataRetriver)->storeEvictedKeys('evictedkeys', $request));
-	echo $result;
-});
-
-
 $app->post('/addContact', function($req, $res) {
 	$name = $req->getParsedBody()['name'];
 	$email = $req->getParsedBody()['email'];
@@ -269,16 +255,6 @@ $app->post('/addContact', function($req, $res) {
 	}
 });
 
-$app->get('/allEvictedkeys', function($req, $res) {
-	$result = ((new DataRetriver)->getAllKeyValues('evictedkeys'));
-	$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
-	$returnJson = array();
-	foreach($rows as $row){
-		$returnJson[] = $row['word'];
-	}
-	echo json_encode($returnJson);
-});
-
 $app->post('/initializeDb', function($req, $res){
 	$request = $req->getParsedBody();
 	$result = ((new DataRetriver())->createTestDB());
@@ -288,6 +264,38 @@ $app->post('/initializeDb', function($req, $res){
 	} else {
 		echo json_encode(['status'=>'FAILURE']);
 	}
+});
+
+$app->post('/updateContact', function($req, $res) {
+	$name = $req->getParsedBody()['name'];
+	$email = $req->getParsedBody()['email'];
+	$result = ((new DataRetriver())->updateData('contact',$email,$name));
+	if($result){
+		echo json_encode(['status'=>'SUCCESS']);
+	} else {
+		echo json_encode(['status'=>'FAILURE']);
+	}
+});
+
+$app->post('/deleteContact', function($req, $res) {
+	$email = $req->getParsedBody()['email'];
+	$DataRetriver = new DataRetriver();
+	$result = ($DataRetriver->deleteData('contact',$email));
+
+	if($result){
+		echo json_encode(['status'=>'SUCCESS']);
+	} else {
+		echo json_encode(['status'=>'FAILURE']);
+	}
+
+	// $returnJson = array();
+	// $returnJson['total'] = 0;
+	// $returnJson['data'] = [];
+
+	// $count = (int)($DataRetriver->getAllKeyValuesCount('contact'));
+	// $returnJson['total'] = $count;
+	// echo json_encode($returnJson);
+
 });
 
 $app->run();
