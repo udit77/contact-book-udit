@@ -5,7 +5,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
     self.initialize = function(){
        return $http({
             method: "post",
-            url: "../plivo/server/index.php/initializeDb",
+            url: "/server/initializeDb",
             data: {
             },
             timeout: 8000,
@@ -16,7 +16,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
     self.fetchByOffset = function(offset){
         return $http({
             method: "get",
-            url: "../plivo/server/index.php/allKeyValuesRange",
+            url: "/server/allKeyValuesRange",
             params: {
                 offset:offset
             },
@@ -28,7 +28,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
     self.fetchByOffsetAndSearch = function(offset,searchString){
         return $http({
             method: "get",
-            url: "../plivo/server/index.php/searchByRange",
+            url: "/server/searchByRange",
             params: {
                 offset:offset,
                 searchString:searchString
@@ -41,7 +41,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
     self.getData = function(){
         return $http({
             method: "get",
-            url: "../plivo/server/index.php/allKeyValues",
+            url: "/server/allKeyValues",
             params: {
             },
             timeout: 8000,
@@ -53,7 +53,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
         console.log(information);
        return $http({
             method: "post",
-            url: "../plivo/server/index.php/addContact",
+            url: "/server/addContact",
             data: {
                 name : information.name,
                 email : information.email
@@ -67,7 +67,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
         console.log(information);
        return $http({
             method: "post",
-            url: "../plivo/server/index.php/updateContact",
+            url: "/server/updateContact",
             data: {
                 name : information.name,
                 email : information.email
@@ -80,7 +80,7 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
     self.deleteContact = function(email){
        return $http({
             method: "post",
-            url: "../plivo/server/index.php/deleteContact",
+            url: "/server/deleteContact",
             data: {
                 email:email
             },
