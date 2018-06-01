@@ -1,6 +1,6 @@
 cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactService){
 	
-    $scope.wordMeaningData = [];
+    $scope.contactDetails = [];
     $scope.dataCount = null;
     $scope.errorString = null;
     $scope.information = {};
@@ -42,9 +42,9 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
 
     var setData = function(response){
         $scope.errorString = null;
-        $scope.wordMeaningData = [];
+        $scope.contactDetails = [];
         for(var i=0;i<response.data.length;i++){
-            $scope.wordMeaningData.push(response.data[i]);
+            $scope.contactDetails.push(response.data[i]);
         }
     }
 
@@ -123,13 +123,13 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
 
     $scope.showUpdate = function(value){
         console.log(value);
-        $scope.updateShownForEmail = value.word;
+        $scope.updateShownForEmail = value.email;
         $scope.updateInformation = angular.copy(value);
         console.log($scope.updateShownForEmail);
     }
 
     $scope.updateCalledFor = function(value){
-        return value.word === $scope.updateShownForEmail;
+        return value.email === $scope.updateShownForEmail;
     }
 
     var populateTable = function(){
@@ -159,14 +159,14 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
         })
     }
 
-    $scope.updateContact = function(word,meaning){
-        console.log(word,meaning);
-        if(!meaning || !meaning.trim()){
+    $scope.updateContact = function(email,name){
+        console.log(email,name);
+        if(!name || !name.trim()){
             $scope.errorString = "Please enter a contact name.";
             return;
         }
         $scope.errorString = null;
-        ContactService.updateContact({email:word,name:meaning}).success(function(response){
+        ContactService.updateContact({email:email,name:name}).success(function(response){
             $scope.updateShownForEmail = null;
             $scope.fetchByOffset($scope.page.current);       
         }).error(function(error){
@@ -176,8 +176,8 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
 
 
     var handleDeleteContact = function(){
-        if($scope.wordMeaningData.length){
-            if($scope.wordMeaningData.length == 1){
+        if($scope.contactDetails.length){
+            if($scope.contactDetails.length == 1){
                $scope.fetchByOffset($scope.page.current-1); 
             }else{
                 $scope.fetchByOffset($scope.page.current);
@@ -189,7 +189,7 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
     $scope.deleteContact = function(value){
         console.log(value);
         $scope.errorString = null;
-        ContactService.deleteContact(value.word).success(function(response){
+        ContactService.deleteContact(value.email).success(function(response){
             setPagination({total:$scope.dataCount-1});
             handleDeleteContact();       
         }).error(function(error){
@@ -239,7 +239,7 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
     $scope.$watch('data.searchString',function(newValue, oldValue){
         if(newValue){
             if(newValue.length > 2){
-                if($scope.wordMeaningData.length == 0){
+                if($scope.contactDetails.length == 0){
                     $scope.errorString = "No search results.";
                     return;
                 }
@@ -259,11 +259,11 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
                         } 
                     }).success(function(response) {
                         $scope.errorString = null;
-                        $scope.wordMeaningData = [];
+                        $scope.contactDetails = [];
                         setPagination(response);
                         $scope.page.current = $scope.page.min;
                         for(var i=0;i<response.data.length;i++){
-                            $scope.wordMeaningData.push(response.data[i]);
+                            $scope.contactDetails.push(response.data[i]);
                             $scope.lastPaginatedId = response.data[i].id;
                         }
                     }).error(function(error,status) {

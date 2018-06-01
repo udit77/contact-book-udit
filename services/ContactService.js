@@ -77,12 +77,12 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
         }) 
     }
 
-    self.deleteContact = function(word){
+    self.deleteContact = function(email){
        return $http({
             method: "post",
             url: "../plivo/server/index.php/deleteContact",
             data: {
-                email:word
+                email:email
             },
             timeout: 8000,
             headers:{} 

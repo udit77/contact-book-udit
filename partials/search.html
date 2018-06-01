@@ -72,20 +72,20 @@
                             <th>
                             <input class="form-control pull-left" placeholder="Search details here" type="text" style="border-radius:2px;" ng-model="data.searchString">  
                             </th>
-                            <th class="align-middle"> <span class="action-icon" ng-include="'./img/search.svg'" ng-click=""></span> </th><th></th>
+                            <th class="align-middle"> <span class="action-icon" ng-include="'./img/search.svg'"></span> </th><th></th>
                         </tr>
                         <tr>
-                            <th>Word</th>
-                            <th>Meaning</th>
+                            <th>Email</th>
+                            <th>Contact Name</th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody ng-if="wordMeaningData.length">
-                        <tr ng-repeat="value in wordMeaningData track by $index">
-                            <td>{{value.word}}</td>
-                            <td><p ng-if="!updateCalledFor(value)">{{value.meaning}}</p>
+                    <tbody ng-if="contactDetails.length">
+                        <tr ng-repeat="value in contactDetails track by $index">
+                            <td>{{value.email}}</td>
+                            <td><p ng-if="!updateCalledFor(value)">{{value.name}}</p>
                                 <div ng-if="updateCalledFor(value)"> 
-                                    <input class="form-control pull-left" placeholder="Enter New Name" type="text" style="border-radius:2px;" ng-model="updateInformation.meaning">
+                                    <input class="form-control pull-left" placeholder="Enter New Name" type="text" style="border-radius:2px;" ng-model="updateInformation.name">
                                 </div>
                             </td>
                             <td class="text-right-with-margin">
@@ -94,7 +94,7 @@
                                     <span class="action-icon" ng-include="'./img/bin.svg'" ng-click="deleteContact(value)"></span>
                                 </div>
                                 <div ng-if="updateCalledFor(value)">
-                                    <span class="action-icon" ng-include="'./img/check.svg'" ng-click="updateContact(value.word,updateInformation.meaning)"></span>
+                                    <span class="action-icon" ng-include="'./img/check.svg'" ng-click="updateContact(value.email,updateInformation.name)"></span>
                                     <span class="action-icon" ng-include="'./img/delete.svg'" ng-click="cancelUpdate(value)"></span>
                                 </div>    
                             </td>
@@ -103,7 +103,7 @@
                 </table>
             </div>
         </div>
-        <div class="row" ng-if="wordMeaningData.length">
+        <div class="row" ng-if="contactDetails.length">
             <div class="col-md-12 text-center">
                 <ul class="pagination justify-content-center" ng-if="page.total>1">
                     <li class="page-item" ng-if="shouldShowPrevious()">
