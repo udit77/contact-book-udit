@@ -1,5 +1,5 @@
 cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactService){
-	
+
     $scope.contactDetails = [];
     $scope.dataCount = null;
     $scope.errorString = null;
@@ -254,11 +254,11 @@ cacheApp.controller('search', function($timeout, $http, $scope, $state, ContactS
                 search_query_object = $timeout(function(){
                     $http({
                         method: "get",
-                        url: "/server/search",
+                        url: "http://ec2-52-14-15-6.us-east-2.compute.amazonaws.com:5000/search",
                         timeout: 8000,
-                        headers:{'Authorization':'plivo123'},
+                        headers:{'Authorization':'4074338336406583e2d6be69f37ebae56a3862e5'},
                         params: {
-                            searchString: encodeURIComponent(newValue)
+                            search_string: encodeURIComponent(newValue)
                         } 
                     }).success(function(response) {
 			$scope.contactDetails = [];
