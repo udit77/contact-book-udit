@@ -1,6 +1,8 @@
 cacheApp.factory('ContactService', function ($timeout, $http, $state) {
   
     self = {};
+    var uri = "http://ec2-52-14-15-6.us-east-2.compute.amazonaws.com:5000";
+    var token = "4074338336406583e2d6be69f37ebae56a3862e5";
 
     self.initialize = function(){
        return $http({
@@ -9,43 +11,43 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
             data: {
             },
             timeout: 8000,
-            headers:{'Authorization':'plivo123'} 
+            headers:{'Authorization':token} 
         }) 
     }
 
     self.fetchByOffset = function(offset){
         return $http({
             method: "get",
-            url: "/server/allKeyValuesRange",
+            url: uri+"/contacts/range",
             params: {
                 offset:offset
             },
             timeout: 8000,
-	   headers:{'Authorization':'plivo123'}
+	   headers:{'Authorization':token}
         })      
     }
 
     self.fetchByOffsetAndSearch = function(offset,searchString){
         return $http({
             method: "get",
-            url: "/server/searchByRange",
+            url: uri+"/search/range",
             params: {
                 offset:offset,
-                searchString:searchString
+                search_string:searchString
             },
             timeout: 8000,
-	    headers:{'Authorization':'plivo123'}
+	    headers:{'Authorization':token}
         }) 
     }
 
     self.getData = function(){
         return $http({
             method: "get",
-            url: "/server/allKeyValues",
+            url: uri+"/contacts",
             params: {
             },
             timeout: 8000,
-	    headers:{'Authorization':'plivo123'}
+	    headers:{'Authorization':token}
         })
     }
 
@@ -53,13 +55,13 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
         console.log(information);
        return $http({
             method: "post",
-            url: "/server/addContact",
+            url: uri+"/add",
             data: {
                 name : information.name,
                 email : information.email
             },
             timeout: 8000,
-	    headers:{'Authorization':'plivo123'}
+	    headers:{'Authorization':token}
         }) 
     }
 
@@ -67,25 +69,25 @@ cacheApp.factory('ContactService', function ($timeout, $http, $state) {
         console.log(information);
        return $http({
             method: "post",
-            url: "/server/updateContact",
+            url: uri+"/update",
             data: {
                 name : information.name,
                 email : information.email
             },
             timeout: 8000,
-	    headers:{'Authorization':'plivo123'}
+	    headers:{'Authorization':token}
         }) 
     }
 
     self.deleteContact = function(email){
        return $http({
             method: "post",
-            url: "/server/deleteContact",
+            url: uri+"/delete",
             data: {
                 email:email
             },
             timeout: 8000,
-	    headers:{'Authorization':'plivo123'}
+	    headers:{'Authorization':token}
         }) 
     }
          
