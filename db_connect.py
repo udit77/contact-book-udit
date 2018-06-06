@@ -20,7 +20,7 @@ class DataRetriever(object):
 	return results
 
     def get_all_contacts(self):
-        sql = 'select * from contact'
+        sql = 'select * from contact limit 10'
         return self.execute_query(sql, ())
 
     def get_all_contact_details_for_range(self,offset = 0):
